@@ -48,7 +48,7 @@
             vert = verts[getRandomIntInclusive(0, 2)]
         }
 
-        landoltSymbolPath = `src/static/landolt_c/${hor}_${vert}.webp`
+        landoltSymbolPath = `landolt_c/${hor}_${vert}.webp`
 
         document.getElementById("landolt_disp").style.height = `${current_size}mm`
 
