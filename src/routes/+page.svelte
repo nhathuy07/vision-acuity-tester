@@ -317,7 +317,7 @@
             <li>Point your finger towards the C-shape's gap direction.</li>
         </ol>
         <p style="color:#cd0000"> Testing results should only be treated as references, and might not reflect your actual vision acuity.</p>
-
+        <p>Check out the project's GitHub repo: <a href="https://github.com/nhathuy07/vision-acuity-tester">https://github.com/nhathuy07/vision-acuity-tester</a></p>
     </div>
 
     <video id="videoOut" autoplay style="padding: 15px; transform: scale(-1, 1); border-radius: 15px;">
