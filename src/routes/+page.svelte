@@ -2,6 +2,7 @@
     // @ts-nocheck
 
     import {FilesetResolver, HandLandmarker, HolisticLandmarker} from '@mediapipe/tasks-vision'
+  import { toast, SvelteToast } from '@zerodevx/svelte-toast'
 
 
     const DENOMINATORS = [200, 160, 125, 100, 80, 63, 50, 40, 32, 25, 20]
@@ -99,6 +100,9 @@
         // Set the video source to the camera stream
         video.srcObject = stream;
         cameraEnabled = true
+
+        toast.pop()
+        toast.push("tester ready")
     }
 
     function terminate() {
@@ -212,7 +216,8 @@
 
                 // Check user direction after timeout
                 if (correct_direction.hor == horizontal && correct_direction.vert == vertical) {
-
+                    toast.pop()
+                    toast.push("✅ correct!")
                     correct_turns += 1
                     turns += 1
 
@@ -306,6 +311,8 @@
     }
 </style>
 
+
+
 <progress value={time_since_last_change} max={timeBeforeSubmission} style="width: 100%; height: 30px"></progress>
 
 <br>
@@ -320,6 +327,7 @@
 
 <div style="display: flex; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
 
+    <SvelteToast/>
     <div id="banner" style="">
         <h1>Online vision acuity tester</h1>
         <p>This is a basic, computerized, gesture-based implementation of the <a href="https://en.wikipedia.org/wiki/Landolt_C">Landolt C chart</a>, built with <a href="https://ai.google.dev/edge/mediapipe/solutions/guide">MediaPipe</a> and Svelte. To use this tool:. </p>
