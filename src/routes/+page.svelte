@@ -2,17 +2,24 @@
     // @ts-nocheck
 
     import {FilesetResolver, HandLandmarker, HolisticLandmarker} from '@mediapipe/tasks-vision'
+
+
+    const DENOMINATORS = [200, 160, 125, 100, 80, 63, 50, 40, 32, 25, 20]
+
     let handLandmarker = undefined
     let video = undefined
     let cameraEnabled = false
     let landoltSymbolPath = ""
 
-    let current_size = 175
+
     let correct_turns = 0
     let turns = 0
 
+    let line = 0
+
     const a = 20
-    let denominator = 200
+    let denominator = DENOMINATORS[line]
+    let current_size = denominator/20 * 2.54
 
     let dir_symbols = {
         "N": {
@@ -212,13 +219,18 @@
                     if (correct_turns >= 4 && turns == 5) {
 
                         // If done 4-5 shapes correctly , halve the shape's size
-                        current_size = current_size / 2
                         correct_direction = _pick_random_symbol()
                         
                         correct_turns = 0
                         turns = 0
                         correct_row += 1
-                        denominator = denominator / 2
+                        line += 1
+                        denominator = DENOMINATORS[line]
+
+                        // update size
+                        current_size = denominator/20 * 2.54
+
+                        console.log("PASSED ", "20 / ", denominator)
 
                         if (denominator == 20) {
                             alert(`✅✅ Test completed!\nYour estimated vision acuity is 20/20!`)
