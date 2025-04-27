@@ -1,6 +1,8 @@
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <script lang="ts">
     // @ts-nocheck
-
     import {FilesetResolver, HandLandmarker, HolisticLandmarker} from '@mediapipe/tasks-vision'
   import { toast, SvelteToast } from '@zerodevx/svelte-toast'
 
@@ -346,10 +348,10 @@
 
 <br>
 
-<button on:click={initialize} id="beginBtn" >Begin Testing</button>
-<button on:click={terminate} id="terminateBtn" class="danger" style="display: none;">Stop Testing</button>
-<button on:click={toggleVideo} class="secondary">Show/Hide Video</button>
-<button on:click={viewHistory} class="secondary">History</button>
+<button on:click={initialize} id="beginBtn" ><i class="bi bi-play-circle-fill"></i>  Begin Testing</button>
+<button on:click={terminate} id="terminateBtn" class="danger" style="display: none;"><i class="bi bi-stop-circle-fill"></i>  Stop Testing</button>
+<button on:click={toggleVideo} class="secondary"><i class="bi bi-eye-slash"></i> Show/Hide Video</button>
+<a href="\history"><button class="secondary"><i class="bi bi-hourglass-bottom"></i>  History</button></a>
 <!-- <button on:click={run_inference}>inference</button> -->
 <br>
 
@@ -359,7 +361,7 @@
 
     <SvelteToast/>
     <div id="banner" style="">
-        <h1>Online vision acuity tester</h1>
+        <h1><i style="color: grey;" class="bi bi-eye-fill"></i> Online vision acuity tester</h1>
         <p>This is a basic, computerized, gesture-based implementation of the <a href="https://en.wikipedia.org/wiki/Landolt_C">Landolt C chart</a>, built with <a href="https://ai.google.dev/edge/mediapipe/solutions/guide">MediaPipe</a> and Svelte. To use this tool:. </p>
         <ol>
             <li>Click on "Begin Testing."</li>
@@ -382,7 +384,7 @@
     
     <img src="" alt="">
     <div>
-        <img id="landolt_disp" src={landoltSymbolPath} alt="" style="height: 175mm;">
+        <img id="landolt_disp" src={landoltSymbolPath} alt="" style="height: 175mm; padding: 15px">
         
         <p style="font-size: 50px"></p>
     </div>
