@@ -65,8 +65,12 @@
 
     async function initialize() {
 
-// Hide banner
+        // Hide banner
         document.getElementById("banner").style.display = "none"
+        document.getElementById("beginBtn").style.display = "none"
+        document.getElementById("terminateBtn").style.display = ""
+
+        
 
         // Configure ML
 
@@ -107,8 +111,15 @@
 
     function terminate() {
 
-        // Hide banner
+        // Hide image
+        let landolt_disp = document.getElementById("landolt_disp")
+        landolt_disp.style.display = 'none'
+
+
+        // Show banner
         document.getElementById("banner").style.display = "block"
+        document.getElementById("beginBtn").style.display = ""
+        document.getElementById("terminateBtn").style.display = "none"
 
         video = document.getElementById("videoOut") as HTMLVideoElement
         
@@ -120,7 +131,7 @@
         video.srcObject = undefined
         cameraEnabled = false
 
-        location.reload()
+        // location.reload()
     }
 
     let disp_symbol = ""
@@ -293,6 +304,15 @@
         }
     }
 
+    function updateRecord(datetime, acuity) {
+
+    }
+
+
+    function viewHistory() {
+
+    }
+
 </script>
 
 <style>
@@ -306,8 +326,17 @@
         border-radius: 5px;
     }
 
+    button.danger {
+        background-color:  #cd0000;
+    }
+
     button.secondary {
         background-color: gray;
+    }
+
+    button:hover {
+        filter: brightness(0.7);
+
     }
 </style>
 
@@ -317,9 +346,10 @@
 
 <br>
 
-<button on:click={initialize} >Begin Testing</button>
-<button on:click={terminate} class="secondary">Stop Testing</button>
+<button on:click={initialize} id="beginBtn" >Begin Testing</button>
+<button on:click={terminate} id="terminateBtn" class="danger" style="display: none;">Stop Testing</button>
 <button on:click={toggleVideo} class="secondary">Show/Hide Video</button>
+<button on:click={viewHistory} class="secondary">History</button>
 <!-- <button on:click={run_inference}>inference</button> -->
 <br>
 
@@ -334,9 +364,14 @@
         <ol>
             <li>Click on "Begin Testing."</li>
             <li>Stand 1 meter apart from your monitor.</li>
-            <li>Point your finger towards the C-shape's gap direction.</li>
+            <li>Point your finger towards the C-shape's gap direction.
+
+            </li>
+
         </ol>
-        <p style="color:#cd0000"> Testing results should only be treated as references, and might not reflect your actual vision acuity.</p>
+        <img style="padding-left: 10px;" src="landolt_c/guide.webp" alt="">
+        
+        <p style="color:#cd0000"> Testing results should only be treated as references, and might not reflect your actual vision acuity. This website is optimized for use on computers.</p>
         <p>Check out the project's GitHub repo: <a href="https://github.com/nhathuy07/vision-acuity-tester">https://github.com/nhathuy07/vision-acuity-tester</a></p>
     </div>
 
