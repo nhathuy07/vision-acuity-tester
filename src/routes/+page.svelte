@@ -321,8 +321,13 @@
     function saveResult(denominator) {
         let date = new Date();
         initHistory()
-        let records = JSON.parse(localStorage.getItem("history"))
+        let records: Array<Array<any>> = JSON.parse(localStorage.getItem("history"))
         records.push([date.toUTCString(), denominator])
+
+        // If array is filling up the localStorage quota, drop the oldest query
+        if (records.length > 30000) {
+            records.shift()
+        }
         localStorage.setItem("history", JSON.stringify(records))
     }
 
@@ -382,7 +387,7 @@
 <a href="\history"><button class="secondary"><i class="bi bi-hourglass-bottom"></i>  History</button></a>
 <!-- <button on:click={run_inference}>inference</button> -->
 
-<span style="display: none">
+<span style="display:none">
     <button on:click={_testingSaveResult}>addhistory</button>
     <button on:click={_testingGetList}>gethistory</button>
     <button on:click={clearHistory}>clearhistory</button>

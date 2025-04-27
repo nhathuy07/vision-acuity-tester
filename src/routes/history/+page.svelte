@@ -13,7 +13,7 @@
         let records = getHistory() as Array<Array<any>>
         let historyTable = document.getElementById("historyTable") as HTMLTableElement
 
-        records.forEach(element => {
+        records.reverse().forEach(element => {
             console.log(element)
             let row = historyTable.insertRow()
             let date = new Date(element[0])
@@ -127,7 +127,7 @@
     <button class="danger" onclick={handleClearHistory}>Clear History</button>
 </span>
 <h1>History</h1>
-
+<p>Sorted from newest to oldest. Up to 30000 last entries</p>
 <div style="display: flex; max-width: 100%">
     <table style="width: fit-content" id="historyTable" cellpadding="10">
         <thead>
