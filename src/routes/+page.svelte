@@ -4,7 +4,9 @@
 <script lang="ts">
     // @ts-nocheck
     import {FilesetResolver, HandLandmarker, HolisticLandmarker} from '@mediapipe/tasks-vision'
-  import { toast, SvelteToast } from '@zerodevx/svelte-toast'
+    import { toast, SvelteToast } from '@zerodevx/svelte-toast'
+
+    import {getHistory, clearHistory} from '../Shared.svelte'
 
 
     const DENOMINATORS = [200, 160, 125, 100, 80, 63, 50, 40, 32, 25, 20]
@@ -252,13 +254,15 @@
 
                         if (denominator == 20) {
                             alert(`✅✅ Test completed!\nYour estimated vision acuity is 20/20!`)
-                            window.location.reload()
+                            saveResult(denominator)
+                            terminate()
                         }
 
                     } else if (correct_turns <= 3 && turns == 5) {
                         // If not, terminate the test early
-                        alert(`✅ Test completed!\nYour estimated vision acuity is ${Math.round(a/denominator*20)}/20`)
-                        window.location.reload()
+                        alert(`✅ Test completed!\nYour estimated vision acuity is ${(a/denominator*20).toFixed(2)}/20`)
+                        saveResult(denominator)
+                        terminate()
                     }
 
                     newImgLoaded = false
@@ -272,8 +276,9 @@
 
                         if (correct_turns <= 3 && turns == 5) {
                             // If not, terminate the test early
-                            alert(`✅ Test completed!\nYour estimated vision acuity is ${Math.round(a/denominator*20)}/20`)
-                            window.location.reload()
+                            alert(`✅ Test completed!\nYour estimated vision acuity is ${(a/denominator*20).toFixed(2)}/20`)
+                            saveResult(denominator)
+                            terminate(denominator)
                         
                         }
 
@@ -306,18 +311,39 @@
         }
     }
 
-    function updateRecord(datetime, acuity) {
+    function initHistory() {
+        if (localStorage.getItem("history") == null) {
+            localStorage.setItem("history", JSON.stringify([]))
+        }
+    }
 
+    
+    function saveResult(denominator) {
+        let date = new Date();
+        initHistory()
+        let records = JSON.parse(localStorage.getItem("history"))
+        records.push([date.toUTCString(), denominator])
+        localStorage.setItem("history", JSON.stringify(records))
     }
 
 
-    function viewHistory() {
+    function _testingSaveResult() {
 
+        saveResult(100)
+    }
+
+    function _testingGetList() {
+        console.log(getHistory())
     }
 
 </script>
 
 <style>
+
+    html {
+        /* padding: 10px; */
+    }
+
     button {
         padding: 10px;
         text-transform: capitalize;
@@ -343,7 +369,6 @@
 </style>
 
 
-
 <progress value={time_since_last_change} max={timeBeforeSubmission} style="width: 100%; height: 30px"></progress>
 
 <br>
@@ -351,13 +376,24 @@
 <button on:click={initialize} id="beginBtn" ><i class="bi bi-play-circle-fill"></i>  Begin Testing</button>
 <button on:click={terminate} id="terminateBtn" class="danger" style="display: none;"><i class="bi bi-stop-circle-fill"></i>  Stop Testing</button>
 <button on:click={toggleVideo} class="secondary"><i class="bi bi-eye-slash"></i> Show/Hide Video</button>
+
+
+
 <a href="\history"><button class="secondary"><i class="bi bi-hourglass-bottom"></i>  History</button></a>
 <!-- <button on:click={run_inference}>inference</button> -->
+
+<span style="display: none">
+    <button on:click={_testingSaveResult}>addhistory</button>
+    <button on:click={_testingGetList}>gethistory</button>
+    <button on:click={clearHistory}>clearhistory</button>
+</span>
+
 <br>
 
 
 
-<div style="display: flex; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
+
+<div style=" display: flex; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
 
     <SvelteToast/>
     <div id="banner" style="">
@@ -392,3 +428,4 @@
 </div>
 
 <!-- <p style="font-size: 300px; font-weight: bold; margin: 30px">{time_since_last_change}</p> -->
+
