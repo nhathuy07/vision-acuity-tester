@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
 <script lang="ts">
     import { onMount } from "svelte";
     import "chartjs-adapter-date-fns"
@@ -8,20 +10,20 @@
     // @ts-nocheck
     import { clearHistory, getHistory } from "../../Shared.svelte";
     
+    let tableData: Array<Array<any>> = []
+
     function populateTable() {
-        console.log('dom content loaded')
+        tableData = []
         let records = getHistory() as Array<Array<any>>
-        let historyTable = document.getElementById("historyTable") as HTMLTableElement
 
         records.reverse().forEach(element => {
             console.log(element)
-            let row = historyTable.insertRow()
             let date = new Date(element[0])
-        
-            row.insertCell().innerHTML = date.toLocaleString()
-            let denominator = element[1]
-            row.insertCell().innerHTML = `${(20/denominator*20).toFixed(2)}/20`
             
+            let denominator = element[1]
+            
+            tableData.push([date.toLocaleString(), `${(20/denominator*20).toFixed(2)}/20`])
+
         });
     }
     // @ts-nocheck
@@ -62,7 +64,7 @@
             }
     }
         })   
-
+        chart.reset()
         chart.resize()
     }
 
@@ -74,7 +76,8 @@
     function handleClearHistory() {
         if (confirm("Clear all records?")) {
             clearHistory()
-            document.location.reload()
+            populateTable()
+            populateChart()
         }
 
     }
@@ -88,6 +91,20 @@
 </script>
 
 <style>
+
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #cacaca;
+  text-align: left;
+  padding: 8px;
+}
+
+
     button {
         padding: 10px;
         text-transform: capitalize;
@@ -114,6 +131,12 @@
 
     }
 
+    td.highlight {
+        color: #447017;
+        font-weight: bold;
+    }
+
+
     * {
         font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
@@ -126,19 +149,30 @@
     <a href=".."><button class="secondary">&lt;&lt; Home</button></a>
     <button class="danger" onclick={handleClearHistory}>Clear History</button>
 </span>
-<h1>History</h1>
+<h1><i style="color: grey;" class="bi bi-clock-history"></i> History</h1>
 <p>Sorted from newest to oldest. Up to 30000 last entries</p>
-<div style="display: flex; max-width: 100%">
-    <table style="width: fit-content" id="historyTable" cellpadding="10">
+<div style="display: flex; max-width: 100%;">
+    <table style="width: fit-content;" id="historyTable" cellpadding="10">
         <thead>
             <tr style="font-weight: bold;">
                 <td>Time</td>
                 <td>Acuity</td>
             </tr>
         </thead>
+        <tbody>
+
+            {#each tableData as record}
+                <tr>
+                    <td>{record[0]}</td>
+                    <td class="highlight">{record[1]}</td>
+                </tr>
+            {/each}
+
+        </tbody>
+
         
     </table>
 
-    <canvas style="margin-left: 15px; max-width: 70%" id="recordChart"></canvas>
+    <canvas style="margin-left: 15px; max-width: 70%; max-height: 300px" id="recordChart"></canvas>
 </div>
 

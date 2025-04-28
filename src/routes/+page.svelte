@@ -334,7 +334,7 @@
 
     function _testingSaveResult() {
 
-        saveResult(100)
+        saveResult(DENOMINATORS[getRandomIntInclusive(0, DENOMINATORS.length-1)])
     }
 
     function _testingGetList() {
